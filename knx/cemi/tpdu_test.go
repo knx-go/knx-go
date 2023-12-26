@@ -8,7 +8,7 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/vapourismo/knx-go/knx/util"
+	"github.com/knx-go/knx-go/knx/util"
 )
 
 func TestAppData_Pack(t *testing.T) {

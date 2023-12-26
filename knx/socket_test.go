@@ -9,7 +9,7 @@ import (
 	"net"
 	"sync"
 
-	"github.com/vapourismo/knx-go/knx/knxnet"
+	"github.com/knx-go/knx-go/knx/knxnet"
 )
 
 type dummySocket struct {

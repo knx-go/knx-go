@@ -10,7 +10,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/vapourismo/knx-go/knx/util"
+	"github.com/knx-go/knx-go/knx/util"
 	"golang.org/x/net/ipv4"
 )
 

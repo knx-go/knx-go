@@ -1,5 +1,5 @@
-[![Check](https://github.com/vapourismo/knx-go/actions/workflows/check.yaml/badge.svg?branch=master)](https://github.com/vapourismo/knx-go/actions/workflows/check.yaml)
-[![GoDoc](https://godoc.org/github.com/vapourismo/knx-go?status.svg)](https://godoc.org/github.com/vapourismo/knx-go)
+[![Check](https://github.com/knx-go/knx-go/actions/workflows/check.yaml/badge.svg?branch=master)](https://github.com/knx-go/knx-go/actions/workflows/check.yaml)
+[![GoDoc](https://godoc.org/github.com/knx-go/knx-go?status.svg)](https://godoc.org/github.com/knx-go/knx-go)
 
 # knx-go
 
@@ -20,15 +20,15 @@ networks.
 
 Simply run the following command.
 
-	$ go get -u github.com/vapourismo/knx-go/...
+	$ go get -u github.com/knx-go/knx-go/...
 
 ## Examples
 
 ### KNXnet/IP Group Client
 
 If you simply want to send and receive group communication, the
-[GroupTunnel](https://godoc.org/github.com/vapourismo/knx-go/knx#GroupTunnel) or
-[GroupRouter](https://godoc.org/github.com/vapourismo/knx-go/knx#GroupRouter)
+[GroupTunnel](https://godoc.org/github.com/knx-go/knx-go/knx#GroupTunnel) or
+[GroupRouter](https://godoc.org/github.com/knx-go/knx-go/knx#GroupRouter)
 might be sufficient to you.
 
 ```go
@@ -38,10 +38,10 @@ import (
 	"log"
 	"os"
 
-	"github.com/vapourismo/knx-go/knx"
-	"github.com/vapourismo/knx-go/knx/cemi"
-	"github.com/vapourismo/knx-go/knx/dpt"
-	"github.com/vapourismo/knx-go/knx/util"
+	"github.com/knx-go/knx-go/knx"
+	"github.com/knx-go/knx-go/knx/cemi"
+	"github.com/knx-go/knx-go/knx/dpt"
+	"github.com/knx-go/knx-go/knx/util"
 )
 
 func main() {
@@ -96,8 +96,8 @@ client, err := knx.NewGroupRouter("224.0.23.12:3671", knx.DefaultRouterConfig)
 
 ### KNXnet/IP CEMI Client
 
-Use [Tunnel](https://godoc.org/github.com/vapourismo/knx-go/knx#Tunnel) or
-[Router](https://godoc.org/github.com/vapourismo/knx-go/knx#Router) for finer control over the
+Use [Tunnel](https://godoc.org/github.com/knx-go/knx-go/knx#Tunnel) or
+[Router](https://godoc.org/github.com/knx-go/knx-go/knx#Router) for finer control over the
 communication with a gateway or router.
 
 ### KNX Bridge
@@ -128,8 +128,8 @@ import (
 
 	"github.com/kr/pretty"
 
-	"github.com/vapourismo/knx-go/knx"
-	"github.com/vapourismo/knx-go/knx/util"
+	"github.com/knx-go/knx-go/knx"
+	"github.com/knx-go/knx-go/knx/util"
 )
 
 func main() {
@@ -160,8 +160,8 @@ import (
 
 	"github.com/kr/pretty"
 
-	"github.com/vapourismo/knx-go/knx"
-	"github.com/vapourismo/knx-go/knx/util"
+	"github.com/knx-go/knx-go/knx"
+	"github.com/knx-go/knx-go/knx/util"
 )
 
 func main() {

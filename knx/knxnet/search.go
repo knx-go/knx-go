@@ -5,7 +5,7 @@ package knxnet
 import (
 	"net"
 
-	"github.com/vapourismo/knx-go/knx/util"
+	"github.com/knx-go/knx-go/knx/util"
 )
 
 // NewSearchReq creates a new SearchReq, addr defines where KNXnet/IP server should send the reponse to.

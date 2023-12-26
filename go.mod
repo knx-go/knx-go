@@ -1,4 +1,4 @@
-module github.com/vapourismo/knx-go
+module github.com/knx-go/knx-go
 
 go 1.16
 

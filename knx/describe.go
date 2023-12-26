@@ -6,7 +6,7 @@ package knx
 import (
 	"time"
 
-	"github.com/vapourismo/knx-go/knx/knxnet"
+	"github.com/knx-go/knx-go/knx/knxnet"
 )
 
 // Describe a single KNXnet/IP server. Uses unicast UDP, address format is "ip:port".

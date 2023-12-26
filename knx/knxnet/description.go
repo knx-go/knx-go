@@ -6,7 +6,7 @@ package knxnet
 import (
 	"net"
 
-	"github.com/vapourismo/knx-go/knx/util"
+	"github.com/knx-go/knx-go/knx/util"
 )
 
 // NewDescriptionReq creates a new Description Request, addr defines where

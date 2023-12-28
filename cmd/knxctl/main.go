@@ -35,19 +35,13 @@ func listen() error {
 			continue
 		}
 
-		for {
-			select {
-			case msg, open := <-tunnel.Inbound():
-				if !open {
-					fmt.Println("tunnel channel closed")
-					return errors.New("tunnel channel closed")
-				}
-
-				if ind, ok := msg.(*cemi.LDataInd); ok {
-					fmt.Printf("%+v", ind)
-				}
+		for msg := range tunnel.Inbound() {
+			if ind, ok := msg.(*cemi.LDataInd); ok {
+				fmt.Printf("%+v\n", ind)
 			}
 		}
+		fmt.Println("tunnel channel closed")
+		return errors.New("tunnel channel closed")
 	}
 }
 

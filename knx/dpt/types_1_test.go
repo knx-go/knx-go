@@ -16,7 +16,7 @@ func TestDPT_1(t *testing.T) {
 		OnTrue  string
 	}
 
-	var types_1 = []DPT1{
+	types_1 := []DPT1{
 		{new(DPT_1001), "Off", "On"},
 		{new(DPT_1002), "False", "True"},
 		{new(DPT_1003), "Disable", "Enable"},
@@ -40,21 +40,22 @@ func TestDPT_1(t *testing.T) {
 		{new(DPT_1022), "scene A", "scene B"},
 		{new(DPT_1023), "only move Up/Down mode", "move Up/Down + StepStop mode"},
 		{new(DPT_1024), "Day", "Night"},
-		{new(DPT_1100), "cooling", "heating"}}
+		{new(DPT_1100), "cooling", "heating"},
+	}
 
 	for _, e := range types_1 {
 		src := e.Dpv
-		if fmt.Sprintf("%s", src) != e.OnFalse {
+		if fmt.Sprint(src) != e.OnFalse {
 			t.Errorf("%#v has wrong default value [%v]. Should be [%s].", e.Dpv, e.Dpv, e.OnFalse)
 		}
 
 		e.Dpv.Unpack([]byte{packB1(false)})
-		if fmt.Sprintf("%s", e.Dpv) != e.OnFalse {
+		if fmt.Sprint(e.Dpv) != e.OnFalse {
 			t.Errorf("%#v has wrong false value [%v]. Should be [%s].", e.Dpv, e.Dpv, e.OnFalse)
 		}
 
 		e.Dpv.Unpack([]byte{packB1(true)})
-		if fmt.Sprintf("%s", e.Dpv) != e.OnTrue {
+		if fmt.Sprint(e.Dpv) != e.OnTrue {
 			t.Errorf("%#v has wrong true value [%v]. Should be [%s].", e.Dpv, e.Dpv, e.OnTrue)
 		}
 	}

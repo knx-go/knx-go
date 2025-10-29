@@ -5,12 +5,27 @@ package cemi
 
 import (
 	"bytes"
-	"math/rand"
+	"crypto/rand"
+	"math/big"
 	"testing"
 )
 
+func randInt(max int) int {
+	if max <= 0 {
+		return 0
+	}
+
+	limit := big.NewInt(int64(max))
+	n, err := rand.Int(rand.Reader, limit)
+	if err != nil {
+		panic(err)
+	}
+
+	return int(n.Int64())
+}
+
 func makeRandInfoSegment() []byte {
-	n := rand.Int() % 256
+	n := randInt(256)
 
 	buffer := make([]byte, n+1)
 	buffer[0] = byte(n)
@@ -25,7 +40,6 @@ func TestInfo_Unpack(t *testing.T) {
 		info := Info{}
 
 		num, err := info.Unpack(data)
-
 		if err != nil {
 			t.Error("Unexpected error:", err, data)
 			continue
@@ -45,12 +59,11 @@ func TestUnpack(t *testing.T) {
 	ldataCodes := []MessageCode{LDataReqCode, LDataConCode, LDataIndCode}
 
 	for i := 0; i < 100; i++ {
-		code := ldataCodes[rand.Int()%3]
+		code := ldataCodes[randInt(3)]
 		data := append([]byte{byte(code)}, makeRandLData()...)
 
 		var msg Message
 		num, err := Unpack(data, &msg)
-
 		if err != nil {
 			t.Error("Unexpected error:", err, data)
 			continue

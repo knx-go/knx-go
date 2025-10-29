@@ -5,13 +5,28 @@ package knxnet
 
 import (
 	"bytes"
+	"crypto/rand"
 	"fmt"
-	"math/rand"
+	"math/big"
 	"net"
 	"testing"
 
 	"github.com/knx-go/knx-go/knx/util"
 )
+
+func randInt(max int) int {
+	if max <= 0 {
+		return 0
+	}
+
+	limit := big.NewInt(int64(max))
+	n, err := rand.Int(rand.Reader, limit)
+	if err != nil {
+		panic(err)
+	}
+
+	return int(n.Int64())
+}
 
 func TestAddress_String(t *testing.T) {
 	t.Run("Ok", func(t *testing.T) {
@@ -52,12 +67,11 @@ func makeRandBuffer(size int) []byte {
 
 func TestHostInfo_Unpack(t *testing.T) {
 	for i := 0; i < 100; i++ {
-		proto := byte(1 + (rand.Int() % 2))
+		proto := byte(1 + randInt(2))
 		data := append([]byte{8, proto}, makeRandBuffer(6)...)
 
 		var hi HostInfo
 		num, err := hi.Unpack(data)
-
 		if err != nil {
 			t.Errorf("Error for data %v: %v", data, err)
 			continue
@@ -84,11 +98,12 @@ func TestHostInfo_Unpack(t *testing.T) {
 		}
 	}
 }
+
 func TestHostInfo_Pack(t *testing.T) {
 	for i := 0; i < 100; i++ {
 		hi := HostInfo{
-			Protocol: Protocol(1 + (rand.Int() % 2)),
-			Port:     Port(rand.Int()),
+			Protocol: Protocol(1 + randInt(2)),
+			Port:     Port(randInt(65535)),
 		}
 		copy(hi.Address[:], makeRandBuffer(4))
 
@@ -120,7 +135,6 @@ func TestHostInfoFromAddress(t *testing.T) {
 		}
 
 		info, err := HostInfoFromAddress(&address)
-
 		if err != nil {
 			t.Fatal("Expected error to be nil, but it was '", err, "'")
 		}
@@ -138,5 +152,4 @@ func TestHostInfoFromAddress(t *testing.T) {
 			t.Fatal("Should not succeed")
 		}
 	})
-
 }

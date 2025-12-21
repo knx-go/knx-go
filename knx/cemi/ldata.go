@@ -10,7 +10,7 @@ type LData struct {
 	Info        Info
 	Control1    ControlField1
 	Control2    ControlField2
-	Source      IndividualAddr
+	Source      PhysicalAddr
 	Destination uint16
 	Data        TransportUnit
 }

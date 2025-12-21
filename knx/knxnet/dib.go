@@ -65,7 +65,7 @@ type DeviceInformationBlock struct {
 	Type                    DescriptionType
 	Medium                  KNXMedium
 	Status                  DeviceStatus
-	Source                  cemi.IndividualAddr
+	Source                  cemi.PhysicalAddr
 	ProjectIdentifier       ProjectInstallationIdentifier
 	SerialNumber            DeviceSerialNumber
 	RoutingMulticastAddress Address

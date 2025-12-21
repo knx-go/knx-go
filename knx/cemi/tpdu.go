@@ -19,22 +19,22 @@ func (apci APCI) IsGroupCommand() bool {
 
 // These are usable APCI values.
 const (
-	GroupValueRead         APCI = 0
-	GroupValueResponse     APCI = 1
-	GroupValueWrite        APCI = 2
-	IndividualAddrWrite    APCI = 3
-	IndividualAddrRequest  APCI = 4
-	IndividualAddrResponse APCI = 5
-	AdcRead                APCI = 6
-	AdcResponse            APCI = 7
-	MemoryRead             APCI = 8
-	MemoryResponse         APCI = 9
-	MemoryWrite            APCI = 10
-	UserMessage            APCI = 11
-	MaskVersionRead        APCI = 12
-	MaskVersionResponse    APCI = 13
-	Restart                APCI = 14
-	Escape                 APCI = 15
+	GroupValueRead       APCI = 0
+	GroupValueResponse   APCI = 1
+	GroupValueWrite      APCI = 2
+	PhysicalAddrWrite    APCI = 3
+	PhysicalAddrRequest  APCI = 4
+	PhysicalAddrResponse APCI = 5
+	AdcRead              APCI = 6
+	AdcResponse          APCI = 7
+	MemoryRead           APCI = 8
+	MemoryResponse       APCI = 9
+	MemoryWrite          APCI = 10
+	UserMessage          APCI = 11
+	MaskVersionRead      APCI = 12
+	MaskVersionResponse  APCI = 13
+	Restart              APCI = 14
+	Escape               APCI = 15
 )
 
 // An AppData contains application data in a transport unit.

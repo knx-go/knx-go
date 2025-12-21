@@ -37,7 +37,7 @@ const (
 // GroupEvent represents a group communication event.
 type GroupEvent struct {
 	Command     GroupCommand
-	Source      cemi.IndividualAddr
+	Source      cemi.PhysicalAddr
 	Destination cemi.GroupAddr
 	Data        []byte
 }

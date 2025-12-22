@@ -10,6 +10,9 @@ type DatapointValue interface {
 
 	// Unpack a the datapoint value from a byte array.
 	Unpack(data []byte) error
+
+	// Read the value in string format
+	String() string
 }
 
 // DatapointMeta gives meta information about a datapoint type.

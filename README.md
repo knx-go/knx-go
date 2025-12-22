@@ -11,9 +11,10 @@ networks.
  Package           | Description
 -------------------|--------------------------------------------------------------------
  **knx**           | Abstractions to communicate with KNXnet/IP servers
- **knx/knxnet**    | KNXnet/IP protocol services
- **knx/dpt**       | Datapoint types
  **knx/cemi**      | CEMI-encoded frames
+ **knx/dpt**       | Datapoint types
+ **knx/gac**       | GroupAddress Catalog
+ **knx/knxnet**    | KNXnet/IP protocol services
  **cmd/knxbridge** | Tool to bridge KNX networks between a KNXnet/IP router and gateway
 
 ## Installation

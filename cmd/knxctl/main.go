@@ -10,25 +10,18 @@ import (
 )
 
 var (
-	server           string
-	port             string
-	bridgeOther      string
-	group            string
-	groupName        string
-	valueRaw         string
-	writeDPT         string
-	waitForResponse  bool
-	waitTimeout      time.Duration = 5 * time.Second
-	groupFile        string
-	dbConnString     string
-	serveListenAddr  string
-	serveEventLimit  int
-	serveLogEvents   bool
-	serveGroupFile   string
-	serveTimeout     time.Duration = 5 * time.Second
-	serveDatabaseURL string
-	configPath       string
-	envFile          string
+	server          string
+	port            string
+	bridgeOther     string
+	group           string
+	groupName       string
+	valueRaw        string
+	writeDPT        string
+	waitForResponse bool
+	waitTimeout     time.Duration = 5 * time.Second
+	groupFile       string
+	configPath      string
+	envFile         string
 )
 
 var root = &cobra.Command{

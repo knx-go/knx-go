@@ -1,156 +1,71 @@
 package main
 
 import (
-	"errors"
-	"fmt"
 	"log"
 	"os"
+	"strings"
 	"time"
 
-	"github.com/urfave/cli/v2"
-
-	"github.com/knx-go/knx-go/knx"
-	"github.com/knx-go/knx-go/knx/cemi"
-	"github.com/knx-go/knx-go/knx/dpt"
-	"github.com/knx-go/knx-go/knx/knxnet"
+	"github.com/spf13/cobra"
 )
-
-func discover() error {
-	client, err := knx.DescribeTunnel(fmt.Sprintf("%s:%s", server, port), time.Millisecond*750)
-	if err != nil {
-		return err
-	}
-
-	fmt.Printf("%+v\n", client)
-
-	return nil
-}
-
-func listen() error {
-	for {
-		tunnel, err := knx.NewTunnel(fmt.Sprintf("%s:%s", server, port), knxnet.TunnelLayerData, knx.DefaultTunnelConfig)
-		if err != nil {
-			fmt.Printf("Error while creating: %v\n", err)
-			time.Sleep(time.Second)
-			continue
-		}
-
-		for msg := range tunnel.Inbound() {
-			if ind, ok := msg.(*cemi.LDataInd); ok {
-				fmt.Printf("%+v\n", ind)
-			}
-		}
-		fmt.Println("tunnel channel closed")
-		return errors.New("tunnel channel closed")
-	}
-}
-
-func sendbool() error {
-	client, err := knx.NewGroupTunnel(fmt.Sprintf("%s:%s", server, port), knx.DefaultTunnelConfig)
-	if err != nil {
-		fmt.Printf("Error while creating: %v\n", err)
-		return err
-	}
-	defer client.Close()
-
-	gd, err := cemi.NewGroupAddrString(group)
-	if err != nil {
-		return err
-	}
-
-	err = client.Send(knx.GroupEvent{
-		Command:     knx.GroupWrite,
-		Destination: gd,
-		Data:        dpt.DPT_1001(value).Pack(),
-	})
-	if err != nil {
-		fmt.Printf("Error while sending: %v\n", err)
-		return err
-	}
-
-	for msg := range client.Inbound() {
-		var temp dpt.DPT_1001
-
-		err := temp.Unpack(msg.Data)
-		if err != nil {
-			continue
-		}
-
-		fmt.Printf("%+v: %v", msg, temp)
-		break
-	}
-	return nil
-}
 
 var (
-	server string
-	port   string
-	group  string
-	value  bool
+	server           string
+	port             string
+	bridgeOther      string
+	group            string
+	groupName        string
+	valueRaw         string
+	writeDPT         string
+	waitForResponse  bool
+	waitTimeout      time.Duration = 5 * time.Second
+	groupFile        string
+	dbConnString     string
+	serveListenAddr  string
+	serveEventLimit  int
+	serveLogEvents   bool
+	serveGroupFile   string
+	serveTimeout     time.Duration = 5 * time.Second
+	serveDatabaseURL string
+	configPath       string
+	envFile          string
 )
 
-func main() {
-	app := &cli.App{
-		Name:  "knxctl",
-		Usage: "knxctl [action]",
-		Flags: []cli.Flag{
-			&cli.StringFlag{
-				Name:        "server",
-				Aliases:     []string{"s"},
-				Value:       "127.0.0.1",
-				Usage:       "server IP Address",
-				Destination: &server,
-			},
-			&cli.StringFlag{
-				Name:        "port",
-				Aliases:     []string{"p"},
-				Value:       "3671",
-				Usage:       "server Port",
-				Destination: &port,
-			},
-		},
-		Commands: []*cli.Command{
-			{
-				Name:  "discover",
-				Usage: "discover KNX server",
-				Action: func(cCtx *cli.Context) error {
-					return discover()
-				},
-			},
-			{
-				Name:  "listen",
-				Usage: "listen KNX messages",
-				Action: func(cCtx *cli.Context) error {
-					return listen()
-				},
-			},
-			{
-				Name:  "send-bool",
-				Usage: "send a boolean KNX message",
-				Action: func(cCtx *cli.Context) error {
-					return sendbool()
-				},
-				Flags: []cli.Flag{
-					&cli.StringFlag{
-						Name:        "group",
-						Aliases:     []string{"g"},
-						Value:       "1",
-						Usage:       "KNX group",
-						Destination: &group,
-					},
-					&cli.BoolFlag{
-						Name:        "value",
-						Aliases:     []string{"v"},
-						Value:       true,
-						Usage:       "KNX value",
-						Destination: &value,
-					},
-				},
-			},
-		},
-	}
+var root = &cobra.Command{
+	Use:   "knxctl2",
+	Short: "KNX multi-tool with listening, bridging, sending, and HTTP serving capabilities",
+	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		if strings.TrimSpace(envFile) == "" {
+			envFile = os.Getenv("KNXCTL2_ENV_FILE")
+		}
+		if err := loadEnvironmentFile(envFile); err != nil {
+			return err
+		}
 
-	if err := app.Run(os.Args); err != nil {
+		if strings.TrimSpace(configPath) == "" {
+			if value := os.Getenv("KNXCTL2_CONFIG"); value != "" {
+				configPath = value
+			}
+		}
+
+		if err := loadConfigFile(configPath); err != nil {
+			return err
+		}
+
+		applyGlobalConfig(cmd)
+		return nil
+	},
+}
+
+func init() {
+	root.PersistentFlags().StringVarP(&envFile, "env-file", "E", "", "path to an environment file containing KEY=VALUE pairs")
+	root.PersistentFlags().StringVarP(&configPath, "config", "c", "", "path to an INI/TOML configuration file")
+	root.PersistentFlags().StringVarP(&server, "server", "s", "127.0.0.1", "KNXnet/IP server address")
+	root.PersistentFlags().StringVarP(&port, "port", "p", "3671", "KNXnet/IP server port")
+}
+
+func main() {
+	if err := root.Execute(); err != nil {
 		log.Fatal(err)
 	}
 }

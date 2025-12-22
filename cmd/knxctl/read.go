@@ -81,16 +81,12 @@ func readValue() error {
 		return err
 	}
 
-	payload, err := encodeDatapointValue(dptType, "0")
-	if err != nil {
-		return err
-	}
-
 	event := knx.GroupEvent{
 		Command:     knx.GroupRead,
 		Destination: destination,
-		Data:        payload,
 	}
+
+	drainInbound(client.Inbound())
 
 	if err := client.Send(event); err != nil {
 		fmt.Printf("Error while sending: %v\n", err)
@@ -116,6 +112,10 @@ func readValue() error {
 				continue
 			}
 
+			if msg.Command == knx.GroupRead {
+				continue
+			}
+
 			if decoder == nil {
 				fmt.Printf("%+v: data=% X\n", msg, msg.Data)
 				return nil
@@ -126,10 +126,21 @@ func readValue() error {
 				return nil
 			}
 
-			fmt.Printf("%+v: %v\n", msg, decoder)
+			fmt.Printf("%v\n", decoder)
 			return nil
 		case <-timer.C:
 			return errors.New("timeout waiting for response")
+		}
+	}
+}
+
+func drainInbound(inbound <-chan knx.GroupEvent) {
+	for {
+		select {
+		case <-inbound:
+			continue
+		default:
+			return
 		}
 	}
 }

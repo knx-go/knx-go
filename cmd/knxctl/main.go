@@ -20,6 +20,7 @@ var (
 	waitForResponse bool
 	waitTimeout     time.Duration = 5 * time.Second
 	groupFile       string
+	postgresqlDSN   string
 	configPath      string
 	envFile         string
 )

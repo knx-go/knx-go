@@ -82,7 +82,7 @@ func listen() error {
 			if catalog != nil {
 				group, ok := catalog.LookupByAddress(event.Destination)
 				if ok || group != nil {
-					destination = fmt.Sprintf("%s (%s)", catalog.FormatAddress(event.Destination), group)
+					destination = fmt.Sprintf("%s (%s)", catalog.FormatAddress(event.Destination), group.Name)
 					description, _ := describeDatapoints(group, event.Data)
 					fmt.Printf("[%s] %s %s -> %s %s\n", timestamp, event.Command, event.Source, destination, description)
 				}

@@ -10,7 +10,6 @@ networks.
 
  Package           | Description
 -------------------|--------------------------------------------------------------------
- **cmd/knxbridge** | Tool to bridge KNX networks between a KNXnet/IP router and gateway
  **cmd/knxctl**    | Tool to interact with KNX devices from CLI
  **knx**           | Abstractions to communicate with KNXnet/IP servers
  **knx/cemi**      | CEMI-encoded frames
@@ -104,17 +103,17 @@ communication with a gateway or router.
 
 ### KNX Bridge
 
-The **knxbridge** tool (in package `cmd/knxbridge`) has multiple use cases.
+The **knxctl bridge** tool (in package `cmd/knxctl`) has multiple use cases.
 
 Expose a KNX network behind a gateway at `10.0.0.2:3671` on the multicast group `224.0.23.12:3671`.
 This allows routers and router clients to access the network.
 
-	$ knxbridge 10.0.0.2:3671 224.0.23.12:3671
+	$ knxctl bridge 10.0.0.2:3671 224.0.23.12:3671
 
 Connect two KNX networks through gateways. In this example one gateway is at `10.0.0.2:3671`, the
 other is at `10.0.0.3:3671`.
 
-	$ knxbridge 10.0.0.2:3671 10.0.0.3:3671
+	$ knxctl bridge 10.0.0.2:3671 10.0.0.3:3671
 
 ### Discover all KNXnet/IP Servers
 

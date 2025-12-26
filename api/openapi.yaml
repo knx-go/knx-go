@@ -1,0 +1,192 @@
+---
+openapi: 3.0.3
+info:
+  title: KNX API
+  version: 1.0.0
+  description: REST interface for interacting with KNX group addresses
+paths:
+  "/healthz":
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: Service is healthy
+  "/v1/group":
+    get:
+      summary: List known catalog groups
+      responses:
+        '200':
+          description: Catalog entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/GroupInfo"
+  "/v1/group/{groupId}/read":
+    get:
+      summary: Issue a KNX group read
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Group address (1/2/3) or catalog name
+      responses:
+        '200':
+          description: Group response received
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Event"
+        '404':
+          description: Group not found
+        '504':
+          description: Timeout waiting for group response
+  "/v1/group/{groupId}/write":
+    post:
+      summary: Send a KNX group command
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Group address (1/2/3) or catalog name
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/WriteEventRequest"
+      responses:
+        '200':
+          description: Command accepted
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/WriteEventResponse"
+        4XX:
+          description: Invalid request
+        5XX:
+          description: KNX gateway error
+  "/v1/group/{groupId}/latest":
+    get:
+      summary: Fetch the latest recorded value
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Group address (1/2/3) or catalog name
+      responses:
+        '200':
+          description: Latest event
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Event"
+        '404':
+          description: No event history available
+  "/v1/group/{groupId}/history":
+    get:
+      summary: Fetch historical events
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Group address (1/2/3) or catalog name
+      - name: from
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Minimum moment to get the events from
+      - name: to
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Maximum moment to get the events to
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+        description: Maximum number of events to return
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+        description: Offset of events not be be returned
+      responses:
+        '200':
+          description: Historical events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Event"
+        '404':
+          description: No event history available
+components:
+  schemas:
+    GroupInfo:
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+        path:
+          type: array
+          items:
+            type: string
+        dpts:
+          type: array
+          items:
+            type: string
+    Event:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        command:
+          type: string
+        source:
+          type: string
+        destination:
+          type: string
+        data:
+          type: string
+          format: byte
+        group:
+          type: string
+        dpt:
+          type: string
+        decoded:
+          type: string
+    WriteEventRequest:
+      type: object
+      properties:
+        value:
+          type: string
+          description: value to be written
+      required:
+      - value
+    WriteEventResponse:
+      type: object
+      properties:
+        status:
+          type: string

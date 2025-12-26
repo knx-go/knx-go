@@ -78,7 +78,7 @@ func listen() error {
 
 		for event := range client.Inbound() {
 			timestamp := time.Now().Format(time.RFC3339Nano)
-			destination := event.Destination.String() // Add "DST (group name)"
+			destination := event.Destination.String()
 			if catalog != nil {
 				group, ok := catalog.LookupByAddress(event.Destination)
 				if ok || group != nil {

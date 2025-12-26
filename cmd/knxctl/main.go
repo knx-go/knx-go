@@ -23,6 +23,7 @@ var (
 	postgresqlDSN   string
 	configPath      string
 	envFile         string
+	serveListenAddr string
 )
 
 var root = &cobra.Command{

@@ -53,6 +53,7 @@ jobs:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 1
+      - run: make swaggerUI
       - uses: dominikh/staticcheck-action@v1
         with:
           version: "2025.1.1"
@@ -60,6 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      - run: make swaggerUI
       - uses: actions/setup-go@v6
         with:
           go-version: stable

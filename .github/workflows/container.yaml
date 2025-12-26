@@ -14,13 +14,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-    strategy:
-      matrix:
-        target:
-          - name: bridge
-            file: Containerfile
-          - name: ctl
-            file: Containerfile.ctl
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -35,11 +28,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push ${{ matrix.target.name }} image
+      - name: Build and push image
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ${{ matrix.target.file }}
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:${{ github.ref_name }}-${{ matrix.target.name }}
+            ghcr.io/${{ github.repository }}:${{ github.ref_name }}

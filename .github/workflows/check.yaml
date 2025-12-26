@@ -29,6 +29,7 @@ jobs:
           go-version: "${{ matrix.go }}"
           check-latest: true
       - run: go version
+      - run: make swaggerUI
       - run: go build -v ./...
       - run: go test -race -parallel 4 -timeout 30s -v ./...
   Format:

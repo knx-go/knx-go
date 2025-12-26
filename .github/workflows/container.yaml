@@ -32,7 +32,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: ${{ matrix.target.file }}
+          file: Containerfile
           push: true
           tags: |
             ghcr.io/${{ github.repository }}:${{ github.ref_name }}
